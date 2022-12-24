@@ -9,6 +9,17 @@ use Illuminate\Http\Request;
 
 class QuotationController extends Controller
 {
+
+    protected $quotation;
+
+    /**
+     * constructor
+     */
+    public function __construct(Quotation $quotation)
+    {
+        $this->quotation = $quotation;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,12 +27,9 @@ class QuotationController extends Controller
      */
     public function index()
     {
-
-        $quotation = Quotation::all();
-
         return response()->json([
             'status' => true,
-            'quotation' => $quotation,
+            'quotation' => $this->quotation->all(),
         ], 200);
     }
 
@@ -33,12 +41,10 @@ class QuotationController extends Controller
      */
     public function store(StoreQuotationRequest $request)
     {
-        $quotation = Quotation::create($request->all());
-
         return response()->json([
             'status' => true,
             'message' => 'Quotation Created Successfully!',
-            'quotation' => $quotation,
+            'quotation' => $this->quotation->create($request->all()),
         ], 200);
     }
 
@@ -48,13 +54,12 @@ class QuotationController extends Controller
      * @param  \App\Models\Quotation  $quotation
      * @return \Illuminate\Http\Response
      */
-    public function show(Quotation $quotation)
+    public function show($id)
     {
-        //
         return response()->json([
             'status' => true,
             'message' => 'Quotation Displayed successfully!',
-            'quotation' => $quotation,
+            'quotation' => $this->quotation->find($id),
         ], 200);
     }
 
@@ -65,15 +70,12 @@ class QuotationController extends Controller
      * @param  \App\Models\Quotation  $quotation
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreQuotationRequest $request, Quotation $quotation)
+    public function update(StoreQuotationRequest $request)
     {
-        
-        $quotation->update($request->all());
-
         return response()->json([
             'status' => true,
             'message' => 'Quotation Updated successfully!',
-            'quotation' => $quotation,
+            'quotation' => $this->quotation->update($request->all()),
         ], 200);
     }
 
@@ -83,10 +85,10 @@ class QuotationController extends Controller
      * @param  \App\Models\Quotation  $quotation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Quotation $quotation)
+    public function destroy($id)
     {
         
-        $quotation->delete();
+        $this->quotation->find($id)->delete();
 
         return response()->json([
             'status' => true,
