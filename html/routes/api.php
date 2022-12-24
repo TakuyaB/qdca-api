@@ -14,4 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('v1/quotation', QuotationController::class);
+Route::prefix('v1')->group(function () {
+    Route::apiResource('quotation', QuotationController::class);
+});
